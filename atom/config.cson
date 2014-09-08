@@ -1,0 +1,19 @@
+'editor':
+  'fontSize': 12
+  'fontFamily': 'Consolas'
+  'showIndentGuide': true
+  'tabLength': 4
+  'preferredLineLength': 132
+  'invisibles': {}
+'core':
+  'themes': [
+    'atom-dark-ui'
+    'atom-light-syntax'
+  ]
+  'projectHome': 'c:\\users\\502345047\\projects'
+'exception-reporting':
+  'userId': '533ee8c3-5e18-8ffe-1b7a-6760d309923b'
+'welcome':
+  'showOnStartup': false
+'metrics':
+  'userId': '8d2b6bbc7bc67fcba1e277ca757c3d7e995fb6fb'
