@@ -8,7 +8,7 @@
 'core':
   'themes': [
     'atom-dark-ui'
-    'atom-light-syntax'
+    'vink-syntax'
   ]
   'projectHome': 'c:\\users\\502345047\\projects'
 'exception-reporting':
