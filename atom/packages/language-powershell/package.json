@@ -1,0 +1,26 @@
+{
+  "name": "language-powershell",
+  "version": "0.4.0",
+  "description": "PowerShell language support for Atom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jugglingnutcase/language-powershell"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# PowerShell language support for Atom\n\n[![Build Status](https://travis-ci.org/jugglingnutcase/language-powershell.svg?branch=master)](https://travis-ci.org/jugglingnutcase/language-powershell)\n[![Build status](https://ci.appveyor.com/api/projects/status/ru4cfpi46m4bn5od/branch/master)](https://ci.appveyor.com/project/jugglingnutcase/language-powershell/branch/master)\n\nThis package highlights PowerShell syntax in the [Atom editor](https://atom.io).\n\n## Language references\n\ni just found this [helpful blog post](http://blogs.msdn.com/b/powershell/archive/2006/05/10/594535.aspx) on the\nPowerShell grammar. i hope i *parse* :stuck_out_tongue_winking_eye: it well.\n\nThis was converted from [@davidpeckam]'s [PowerShell textmate bundle](https://github.com/davidpeckham/powershell.tmbundle). Thanks [@davidpeckam]!\n\n[@davidpeckam]:https://github.com/davidpeckham\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/jugglingnutcase/language-powershell/issues"
+  },
+  "homepage": "https://github.com/jugglingnutcase/language-powershell",
+  "_id": "language-powershell@0.4.0",
+  "dist": {
+    "shasum": "ef52df6027925f4d43541d65b39b4f303ecb2076"
+  },
+  "_resolved": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-2548-15t127z\\package.tgz",
+  "_from": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-2548-15t127z\\package.tgz"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "xml-formatter",
+  "main": "./lib/xml-formatter",
+  "version": "0.7.1",
+  "description": "XML Formatter",
+  "activationEvents": [
+    "xml-formatter:indent"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neyestrabelli/xml-formatter"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# xml-formatter package\n\nSimple XML Formatter, hit `CMD-SHIFT-X`.\n\n## Preview\n\n![Format in Action 2](http://www.neyestrabelli.com/arquivos/xml-formatter3.gif)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/neyestrabelli/xml-formatter/issues"
+  },
+  "homepage": "https://github.com/neyestrabelli/xml-formatter",
+  "_id": "xml-formatter@0.7.1",
+  "dist": {
+    "shasum": "1079ba1d6e0bd4f96051b3f35c35da41b00655d9"
+  },
+  "_resolved": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-7728-xf0sat\\package.tgz",
+  "_from": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-7728-xf0sat\\package.tgz"
+}
