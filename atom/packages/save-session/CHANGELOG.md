@@ -1,3 +1,21 @@
+## 0.5.0 - Changed saving the project
+* The project is now saved when the window gets focus instead of with file edits.
+
+## 0.4.0 - Removing the new file buffer
+* The new file is automatically closed when Atom starts if there were previous
+files open.
+
+## 0.3.2 - Bug fixes
+* Fixed a bug where closing a buffer was not saved.
+
+## 0.3.1 - Bug fixes
+* Fixed a bug where you had to reopen an Atom window for the Skip Save Prompt setting
+to actually save.
+
+## 0.3.0 - Disabled save on exit
+* Skip Save Prompt will disable the save on exit prompt
+* Fixed some bugs
+
 ## 0.2.4 - Minor edits
 * Just readme edits and deleting some unused stuff.
 

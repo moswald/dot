@@ -4,12 +4,14 @@ fs = require 'fs'
 module.exports =
 
   configDefaults:
+    disableNewFileOnOpen: true
     restoreProject: true
     restoreWindow: true
     restoreFileTreeSize: true
     restoreOpenFiles: true
     restoreOpenFileContents: true
     restoreCursor: true
+    skipSavePrompt: true
     bufferSaveFile: atom.config.configDirPath + '/save-session-buffer.json'
 
   activate: (state) ->
@@ -19,12 +21,18 @@ module.exports =
     height = atom.config.get('save-session.height')
     treeSize = atom.config.get('save-session.tree size')
     project = atom.config.get('save-session.project')
+    @defaultSavePrompt = atom.workspace.getActivePane().constructor.prototype.promptToSaveItem
+    @onExit = false;
 
     if fs.existsSync(@getBufferSaveFile())
       buffersStr = fs.readFileSync(@getBufferSaveFile(), encoding: 'utf8')
     buffers = null
     if buffersStr?
       buffers = JSON.parse(buffersStr)
+
+    if @getShouldDisableNewBufferOnOpen() and @getShouldRestoreOpenFiles() and
+      buffers? and buffers.length > 0
+        @closeFirstBuffer()
 
     if @getShouldRestoreWindow() and x? and y? and width? and height?
       @restoreDimensions(x, y, width, height)
@@ -38,7 +46,13 @@ module.exports =
     if @getShouldRestoreProject() and project? and not atom.project.getPath()?
       @restoreProject(project)
 
+    if @getShouldSkipSavePrompt()
+      @disableSavePrompt()
+
     @addListeners()
+
+  getShouldDisableNewBufferOnOpen: ->
+    atom.config.get 'save-session.disableNewFileOnOpen'
 
   getBufferSaveFile: ->
     atom.config.get 'save-session.bufferSaveFile'
@@ -65,6 +79,9 @@ module.exports =
     for tab in $('.tab-bar').children('li')
       if $(tab).hasClass('active')
         return $(tab).children('.title').data('path')
+
+  getShouldSkipSavePrompt: ->
+    atom.config.get 'save-session.skipSavePrompt'
 
   saveDimensions: ->
     window = atom.getWindowDimensions()
@@ -114,7 +131,7 @@ module.exports =
 
         # Replace the text if needed
         if @getShouldRestoreOpenFileContents() and
-          buf.getText() is not buffer.text and buf.getText() is buffer.diskText
+          buf.getText() isnt buffer.text and buf.getText() is buffer.diskText
             buf.setText(buffer.text)
 
   restoreDimensions: (x, y, width, height, treeSize) ->
@@ -131,10 +148,53 @@ module.exports =
   restoreProject: (path) ->
     atom.project.setPath(path)
 
+  disableSavePrompt: ->
+    #Hack to override the promptToSaveItem method of Pane
+    #There doesn't appear to be a direct way to get to the Pane object
+    #with require(), unfortunately, so I have to result to this hack.
+    atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = (item) ->
+      return true;
+
+  enableSavePrompt: ->
+    atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = @defaultSavePrompt
+
+  closeFirstBuffer: ->
+    # Also pretty hacky. We listen for the item to be added, then remove it and
+    # destroy the listener. Unfortunately, this causes an error in atom, but it
+    # still functions fine.
+    removeFunc = =>
+      firstItem = atom.workspace.activePane.items[0]
+      atom.workspace.activePane.destroyItem firstItem
+      console.log "This error is caused by Save Session removing the new file on open."
+      atom.workspaceView.off 'pane:item-added', removeFunc
+
+    atom.workspaceView.on 'pane:item-added', removeFunc
+
   addListeners: ->
+    # When the window resizes
     $(window).on 'resize', => @saveDimensions()
 
+    # When files are edited
     atom.workspace.observeTextEditors (editor) =>
       editor.onDidStopChanging =>
-        @saveProject()
         @saveBuffers()
+
+    $(window).on 'focus', (event) =>
+      @saveProject()
+
+    # When closing an editor
+    atom.workspace.observePanes (pane) =>
+      pane.onDidRemoveItem =>
+        if not @onExit
+          @saveBuffers()
+
+    # When changing Skip Save Prompt
+    atom.config.observe 'save-session.skipSavePrompt', (val) =>
+      if val
+        @disableSavePrompt()
+      else
+        @enableSavePrompt()
+
+    # Before exit
+    $(window).on 'beforeunload', =>
+      @onExit = true
