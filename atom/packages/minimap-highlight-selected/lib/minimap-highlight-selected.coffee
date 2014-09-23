@@ -1,9 +1,8 @@
-{Subscriber} = require 'emissary'
+{CompositeDisposable} = require 'event-kit'
 
 class MinimapHighlightSelected
-  Subscriber.includeInto(this)
-
-  views: {}
+  constructor: ->
+    @subscriptions = new CompositeDisposable
 
   activate: (state) ->
     @highlightSelectedPackage = atom.packages.getLoadedPackage('highlight-selected')
@@ -15,6 +14,8 @@ class MinimapHighlightSelected
 
     @minimap = require @minimapPackage.path
     @highlightSelected = require @highlightSelectedPackage.path
+
+    return @deactivate() unless @minimap.versionMatch('3.x')
 
     @minimap.registerPlugin 'highlight-selected', this
 
@@ -28,37 +29,33 @@ class MinimapHighlightSelected
   isActive: -> @active
   activatePlugin: ->
     return if @active
+    return unless @minimap.active
 
     @active = true
 
-    @createViews() if @minimap.active
+    @createViews()
 
-    @subscribe @minimap, 'activated', @createViews
-    @subscribe @minimap, 'deactivated', @destroyViews
+    @subscriptions.add @minimap.onDidActivate @createViews
+    @subscriptions.add @minimap.onDidDeactivate @destroyViews
 
   deactivatePlugin: ->
     return unless @active
 
     @active = false
     @destroyViews()
-    @unsubscribe()
+    @subscriptions.dispose()
 
   createViews: =>
     return if @viewsCreated
 
     @viewsCreated = true
-    @viewsSubscription = @minimap.eachMinimapView ({view}) =>
-      highlightView = new @MinimapHighlightSelectedView(view)
-      highlightView.attach()
-      highlightView.handleSelection()
-      @views[view.editor.id] = highlightView
+    @view = new @MinimapHighlightSelectedView(@minimap)
+    @view.handleSelection()
 
   destroyViews: =>
     return unless @viewsCreated
-
-    @viewsSubscription.off()
     @viewsCreated = false
-    view.destroy() for id,view of @views
-    @views = {}
+    @view.removeMarkers()
+    @view.destroy()
 
 module.exports = new MinimapHighlightSelected
