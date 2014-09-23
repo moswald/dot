@@ -1,3 +1,35 @@
+3.1.0 / 2014-09-22
+==================
+
+* add command to generate a plugin package
+* fix remaining deprecated calls
+* update documentation with old wiki pages
+* set autoToggle true by default
+* replace lineHeight by interline in settings
+
+3.0.3 / 2014-09-19
+==================
+
+* fix issue with renamed event in Atom nightly
+
+3.0.2 / 2014-09-19
+==================
+
+* fix the case where the minimap is positioned incorrectly when a user style alters the tab bar height
+
+3.0.1 / 2014-09-19
+==================
+
+* fix bug with text drawing when charWidth != 1
+
+3.0.0 / 2014-09-19
+==================
+
+* :racehorse: improved performances by switching to a canvas-based rendering
+* :sparkles: add decoration API using the same interface than the Atom one
+* implements a new event model based on the Atom one. Previous events re now deprecated.
+* add new API documentation availaible at http://fangduncai.com/atom-minimap/
+
 2.3.3 / 2014-08-27
 ==================
 
@@ -120,8 +152,8 @@
 * minimap views are now created for each editor and not for each pane
 * add a `eachMinimapView` subscription method in `Minimap` class
 * add a view aware minimap rendering, it speeds up rendering and updates for large files
-* add delegation of `MinimapEditorView` methods in `MinimapView`, allowing to manipulate most of its API directory from a minimap view
-* add a lines API on `MinimapEditorView` allowing to decorates lines with classes even when they are not rendered yet
+* add delegation of `MinimapRenderView` methods in `MinimapView`, allowing to manipulate most of its API directory from a minimap view
+* add a lines API on `MinimapRenderView` allowing to decorates lines with classes even when they are not rendered yet
 
 
 0.10.0 / 2014-05-11
