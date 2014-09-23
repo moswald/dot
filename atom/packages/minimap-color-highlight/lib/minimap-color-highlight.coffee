@@ -1,9 +1,11 @@
-{Subscriber} = require 'emissary'
+{CompositeDisposable} = require 'event-kit'
 
 class MinimapColorHighlight
-  Subscriber.includeInto(this)
 
   views: {}
+  constructor: ->
+    @subscriptions = new CompositeDisposable
+
   activate: (state) ->
     @colorHighlightPackage = atom.packages.getLoadedPackage('atom-color-highlight')
     @minimapPackage = atom.packages.getLoadedPackage('minimap')
@@ -13,6 +15,8 @@ class MinimapColorHighlight
     @MinimapColorHighlightView = require('./minimap-color-highlight-view')()
 
     @minimap = require @minimapPackage.path
+    return @deactivate() unless @minimap.versionMatch('3.x')
+
     @colorHighlight = require @colorHighlightPackage.path
 
     @minimap.registerPlugin 'color-highlight', this
@@ -32,26 +36,32 @@ class MinimapColorHighlight
 
     @createViews() if @minimap.active
 
-    @subscribe @minimap, 'activated', @createViews
-    @subscribe @minimap, 'deactivated', @destroyViews
+    @subscriptions.add @minimap.onDidActivate @createViews
+    @subscriptions.add @minimap.onDidDeactivate @destroyViews
 
   deactivatePlugin: ->
     return unless @active
 
     @active = false
     @destroyViews()
-    @unsubscribe()
+    @subscriptions.dispose()
 
   createViews: =>
     return if @viewsCreated
 
     @viewsCreated = true
-    @paneSubscription = @colorHighlight.eachColorHighlightEditor (editor) =>
-      pane = editor.editorView.getPane()
+    @paneSubscription = @colorHighlight.eachColorHighlightEditor (color) =>
+      editor = color.editorView.getEditor()
+      pane = color.editorView.getPaneView()
       return unless pane?
-      view = new @MinimapColorHighlightView pane
+      view = new @MinimapColorHighlightView color.getActiveModel(), color.editorView
 
-      @views[pane.model.id] = view
+      @views[editor.id] = view
+
+      subscription = editor.getBuffer().onDidDestroy =>
+        @views[editor.id].destroy()
+        delete @views[editor.id]
+        subscription.dispose()
 
   destroyViews: =>
     return unless @viewsCreated
