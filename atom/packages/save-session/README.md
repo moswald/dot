@@ -24,9 +24,14 @@ Atom is closed and relaunched.
 
  - `Disable New File On Open` - Whether or not to auto close the new file auto
  opened by Atom if other files will be restored.
- - `Buffer Save File` - The file to save your file info in so it can be restored.
+ - `Disable New File On Open Always` - Will never show the new file that Atom
+ opens, even if other files are not going to be restored.
+ - `Data Save Folder` - The root folder to save the session data in.
  - `Restore Cursor` - Whether or not the cursor position should be restored.
  - `Restore File Tree Size` - Whether or not the file tree size will be restored.
+ - `Restore Open Files Per Project` - If enabled, only files from previous sessions
+ with the save project will be restored. Otherwise, files from your last session
+ will be restored.
  - `Restore Open File Contents` - Whether or not file contents will be
  automatically restored on load. This has no effect if `Restore Open Files` is
  disabled.
@@ -50,8 +55,8 @@ Except for file data, Save Session uses Atom's settings to save its data. If you
 look at your settings for Save Session, you will see it all there.
 
 Files are saved in as json on a file. By default, this file is stored
-at `<atom dir>/save-sessions-buffer.json`, but this can be changed through the
-setting `Buffer Save File`.
+at `<atom package dir>/save-session/<projectPath>/projects.json`, but this can
+be changed through the setting `Data Save Folder`.
 
 ## Contributing
 

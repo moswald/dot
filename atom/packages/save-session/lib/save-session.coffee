@@ -1,18 +1,21 @@
 {$} = require 'atom'
 fs = require 'fs'
+mkdirp = require 'mkdirp'
 
 module.exports =
 
   configDefaults:
     disableNewFileOnOpen: true
+    disableNewFileOnOpenAlways: false
     restoreProject: true
     restoreWindow: true
     restoreFileTreeSize: true
+    restoreOpenFilesPerProject: true
     restoreOpenFiles: true
     restoreOpenFileContents: true
     restoreCursor: true
     skipSavePrompt: true
-    bufferSaveFile: atom.config.configDirPath + '/save-session-buffer.json'
+    dataSaveFolder: atom.packages.getPackageDirPaths() + '/save-session/projects'
 
   activate: (state) ->
     x = atom.config.get('save-session.x')
@@ -22,16 +25,23 @@ module.exports =
     treeSize = atom.config.get('save-session.tree size')
     project = atom.config.get('save-session.project')
     @defaultSavePrompt = atom.workspace.getActivePane().constructor.prototype.promptToSaveItem
-    @onExit = false;
+    @onExit = false
 
-    if fs.existsSync(@getBufferSaveFile())
-      buffersStr = fs.readFileSync(@getBufferSaveFile(), encoding: 'utf8')
+    if @getShouldRestoreProject() and project? and not atom.project.getPath()?
+      @restoreProject(project)
+
+    if fs.existsSync(@getSaveFile())
+      buffersStr = fs.readFileSync(@getSaveFile(), encoding: 'utf8')
+    else
     buffers = null
     if buffersStr?
       buffers = JSON.parse(buffersStr)
 
-    if @getShouldDisableNewBufferOnOpen() and @getShouldRestoreOpenFiles() and
-      buffers? and buffers.length > 0
+    # Disable the buffer that opens by default.
+    if @getShouldDisableNewBufferOnOpen() and
+      (@getShouldDisableNewBufferOnOpenAlways() or
+      (@getShouldRestoreOpenFiles() and
+      buffers? and buffers.length > 0))
         @closeFirstBuffer()
 
     if @getShouldRestoreWindow() and x? and y? and width? and height?
@@ -43,19 +53,26 @@ module.exports =
     if @getShouldRestoreOpenFiles() and buffers?
       @restoreBuffers(buffers)
 
-    if @getShouldRestoreProject() and project? and not atom.project.getPath()?
-      @restoreProject(project)
-
-    if @getShouldSkipSavePrompt()
-      @disableSavePrompt()
-
     @addListeners()
 
   getShouldDisableNewBufferOnOpen: ->
     atom.config.get 'save-session.disableNewFileOnOpen'
 
-  getBufferSaveFile: ->
-    atom.config.get 'save-session.bufferSaveFile'
+  getShouldDisableNewBufferOnOpenAlways: ->
+    atom.config.get 'save-session.disableNewFileOnOpenAlways'
+
+  getSaveFile: ->
+    folder = @getSaveFolder()
+    if @getShouldRestoreOpenFilesPerProject()
+      return folder + '/' + atom.project.path + '/' + 'project.json'
+    else
+      return folder + '/undefined/project.json'
+
+  getShouldRestoreOpenFilesPerProject: ->
+    atom.config.get 'save-session.restoreOpenFilesPerProject'
+
+  getSaveFolder: ->
+    atom.config.get 'save-session.dataSaveFolder'
 
   getShouldRestoreProject: ->
     atom.config.get 'save-session.restoreProject'
@@ -105,11 +122,16 @@ module.exports =
       buffer.text = editor.buffer.cachedText
       buffer.active = activePath is editor.getPath()
       buffer.path = editor.getPath()
-      buffer.cursor = editor.getCursorBufferPosition()
+      if editor.cursors.length > 0
+        buffer.cursor = editor.getCursorBufferPosition()
 
       buffers.push buffer
 
-    fs.writeFile(@getBufferSaveFile(), JSON.stringify(buffers))
+    file = @getSaveFile()
+    folder = file.substring(0, file.lastIndexOf('/'))
+    mkdirp folder, (err) =>
+      console.log folder
+      fs.writeFile(@getSaveFile(), JSON.stringify(buffers))
 
   saveTimer: ->
     @saveProject()
@@ -121,18 +143,21 @@ module.exports =
 
 
   openBuffer: (buffer) ->
-    # activatePane does not work yet :(
-      editor = atom.workspace.open(buffer.path, activatePane: buffer.active)
-      .then (editor) =>
-        buf = editor.buffer
+    if atom.workspace.saveSessionOpenFunc?
+      promise = atom.workspace.saveSessionOpenFunc(buffer.path)
+    else
+      promise = atom.workspace.open(buffer.path)
 
-        if @getShouldRestoreCursor()
-          editor.setCursorBufferPosition(buffer.cursor)
+    promise.then (editor) =>
+      buf = editor.buffer
 
-        # Replace the text if needed
-        if @getShouldRestoreOpenFileContents() and
-          buf.getText() isnt buffer.text and buf.getText() is buffer.diskText
-            buf.setText(buffer.text)
+      if @getShouldRestoreCursor()
+        editor.setCursorBufferPosition(buffer.cursor)
+
+      # Replace the text if needed
+      if @getShouldRestoreOpenFileContents() and
+        buf.getText() isnt buffer.text and buf.getText() is buffer.diskText
+          buf.setText(buffer.text)
 
   restoreDimensions: (x, y, width, height, treeSize) ->
     atom.setWindowDimensions
@@ -149,26 +174,29 @@ module.exports =
     atom.project.setPath(path)
 
   disableSavePrompt: ->
-    #Hack to override the promptToSaveItem method of Pane
-    #There doesn't appear to be a direct way to get to the Pane object
-    #with require(), unfortunately, so I have to result to this hack.
+    # Hack to override the promptToSaveItem method of Pane
+    # There doesn't appear to be a direct way to get to the Pane object
+    # with require(), unfortunately, so I have to result to this hack.
     atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = (item) ->
-      return true;
+      return true
 
   enableSavePrompt: ->
-    atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = @defaultSavePrompt
+    atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = (item) =>
+      @defaultSavePrompt(item)
 
+  enableSavePromptTemp: ->
+    atom.workspace.getActivePane().constructor.prototype.promptToSaveItem = (item) =>
+      save = @defaultSavePrompt(item)
+      @disableSavePrompt()
+      save
+
+  # Sets the default open function to a function that sets the default open
+  # function to the default open function... Yay!
   closeFirstBuffer: ->
-    # Also pretty hacky. We listen for the item to be added, then remove it and
-    # destroy the listener. Unfortunately, this causes an error in atom, but it
-    # still functions fine.
-    removeFunc = =>
-      firstItem = atom.workspace.activePane.items[0]
-      atom.workspace.activePane.destroyItem firstItem
-      console.log "This error is caused by Save Session removing the new file on open."
-      atom.workspaceView.off 'pane:item-added', removeFunc
-
-    atom.workspaceView.on 'pane:item-added', removeFunc
+    atom.workspace.constructor.prototype.saveSessionOpenFunc = atom.workspace.constructor.prototype.open
+    removeFunc = (path) =>
+      atom.workspace.constructor.prototype.open = atom.workspace.constructor.prototype.saveSessionOpenFunc
+    atom.workspace.constructor.prototype.open = removeFunc
 
   addListeners: ->
     # When the window resizes
@@ -182,11 +210,16 @@ module.exports =
     $(window).on 'focus', (event) =>
       @saveProject()
 
-    # When closing an editor
     atom.workspace.observePanes (pane) =>
+      # When closing an editor
       pane.onDidRemoveItem =>
         if not @onExit
           @saveBuffers()
+
+      # Before closing an editor
+      pane.onWillDestroyItem (event) =>
+        if @getShouldSkipSavePrompt()
+          @enableSavePromptTemp()
 
     # When changing Skip Save Prompt
     atom.config.observe 'save-session.skipSavePrompt', (val) =>

@@ -1,7 +1,7 @@
 {
   "name": "save-session",
   "main": "./lib/save-session",
-  "version": "0.5.0",
+  "version": "0.7.1",
   "description": "An Atom package to restore your session.",
   "repository": {
     "type": "git",
@@ -11,17 +11,19 @@
   "engines": {
     "atom": ">0.50.0"
   },
-  "dependencies": {},
-  "readme": "# Save Session (Atom Package)\n\nSave Session is designed to reopen your last session in [Atom](https://atom.io/).\nIt automatically saves all file's contents and other session information in the\nbackground so you don't have to worry as much about losing an important file.\nI liked how [Sublime Text](http://www.sublimetext.com/) does this, so I wanted\nto recreate it for Atom\n\nHere is a really high quality preview of a an unsaved file being reloaded when\nAtom is closed and relaunched.\n\n![preview](https://raw.githubusercontent.com/mpeterson2/save-session/master/preview.gif)\n\n## What is saved\n\n - The project currently being worked on\n - The files currently being worked on, whether they are saved to disk or not\n - The size of the window and file tree\n - The position of the cursor\n\n## Settings\n\n### User settings\n\n - `Disable New File On Open` - Whether or not to auto close the new file auto\n opened by Atom if other files will be restored.\n - `Buffer Save File` - The file to save your file info in so it can be restored.\n - `Restore Cursor` - Whether or not the cursor position should be restored.\n - `Restore File Tree Size` - Whether or not the file tree size will be restored.\n - `Restore Open File Contents` - Whether or not file contents will be\n automatically restored on load. This has no effect if `Restore Open Files` is\n disabled.\n - `Restore Open Files` - Whether or not files will be reopened.\n - `Restore Project` - Whether or not the project will be reopened.\n - `Restore Window` - Whether or not the window size/positions will be saved.\n - `Skip Save Prompt` - This will disable the save on exit prompt.\n\n### Other settings\nThese settings are used by the package to restore data. You can change them, but\nthey will all be set by the package when a related event happens.\n\n - `Height` - The height of the editor\n - `Width` - The width of the editor\n - `X` - The x position of the editor\n - `Y` - The y position of the editor\n\n## How it works\n\nExcept for file data, Save Session uses Atom's settings to save its data. If you\nlook at your settings for Save Session, you will see it all there.\n\nFiles are saved in as json on a file. By default, this file is stored\nat `<atom dir>/save-sessions-buffer.json`, but this can be changed through the\nsetting `Buffer Save File`.\n\n## Contributing\n\nContributions are of course welcome. Feel free to submit issues if you see\nanything misbehaving. Pull requests are also welcome if you want to improve or\nchange something.\n",
+  "dependencies": {
+    "mkdirp": ">=0.5.0"
+  },
+  "readme": "# Save Session (Atom Package)\n\nSave Session is designed to reopen your last session in [Atom](https://atom.io/).\nIt automatically saves all file's contents and other session information in the\nbackground so you don't have to worry as much about losing an important file.\nI liked how [Sublime Text](http://www.sublimetext.com/) does this, so I wanted\nto recreate it for Atom\n\nHere is a really high quality preview of a an unsaved file being reloaded when\nAtom is closed and relaunched.\n\n![preview](https://raw.githubusercontent.com/mpeterson2/save-session/master/preview.gif)\n\n## What is saved\n\n - The project currently being worked on\n - The files currently being worked on, whether they are saved to disk or not\n - The size of the window and file tree\n - The position of the cursor\n\n## Settings\n\n### User settings\n\n - `Disable New File On Open` - Whether or not to auto close the new file auto\n opened by Atom if other files will be restored.\n - `Disable New File On Open Always` - Will never show the new file that Atom\n opens, even if other files are not going to be restored.\n - `Data Save Folder` - The root folder to save the session data in.\n - `Restore Cursor` - Whether or not the cursor position should be restored.\n - `Restore File Tree Size` - Whether or not the file tree size will be restored.\n - `Restore Open Files Per Project` - If enabled, only files from previous sessions\n with the save project will be restored. Otherwise, files from your last session\n will be restored.\n - `Restore Open File Contents` - Whether or not file contents will be\n automatically restored on load. This has no effect if `Restore Open Files` is\n disabled.\n - `Restore Open Files` - Whether or not files will be reopened.\n - `Restore Project` - Whether or not the project will be reopened.\n - `Restore Window` - Whether or not the window size/positions will be saved.\n - `Skip Save Prompt` - This will disable the save on exit prompt.\n\n### Other settings\nThese settings are used by the package to restore data. You can change them, but\nthey will all be set by the package when a related event happens.\n\n - `Height` - The height of the editor\n - `Width` - The width of the editor\n - `X` - The x position of the editor\n - `Y` - The y position of the editor\n\n## How it works\n\nExcept for file data, Save Session uses Atom's settings to save its data. If you\nlook at your settings for Save Session, you will see it all there.\n\nFiles are saved in as json on a file. By default, this file is stored\nat `<atom package dir>/save-session/<projectPath>/projects.json`, but this can\nbe changed through the setting `Data Save Folder`.\n\n## Contributing\n\nContributions are of course welcome. Feel free to submit issues if you see\nanything misbehaving. Pull requests are also welcome if you want to improve or\nchange something.\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/mpeterson2/save-session/issues"
   },
   "homepage": "https://github.com/mpeterson2/save-session",
-  "_id": "save-session@0.5.0",
+  "_id": "save-session@0.7.1",
   "dist": {
-    "shasum": "54315a97136bb346fc78b1e86f4654fdef1bfcfa"
+    "shasum": "8e44f8253fcd199ef231bab063f580d2b7bfd089"
   },
-  "_resolved": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-114815-1408-1ksfv35\\package.tgz",
-  "_from": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-114815-1408-1ksfv35\\package.tgz"
+  "_resolved": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-14364-1rvb6dq\\package.tgz",
+  "_from": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-14364-1rvb6dq\\package.tgz"
 }

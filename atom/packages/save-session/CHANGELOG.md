@@ -1,3 +1,31 @@
+## 0.7.1 - Updated readme
+
+## 0.7.0 - Restoring files per project
+* Added a setting that allows files to be restored per project instead of
+globally.
+
+## 0.6.0 - Always open without default file
+* Added the option to never open the file that Atom opens automatically on
+startup. Default is false.
+
+## 0.5.5 - Small fixes
+* Removed option when opening files since it didn't do what I expected :(.
+* Enabled save on close prompt for closing a single file at a time.
+
+## 0.5.4 - Bug fix
+* Fixed an error thrown when splitting panes.
+
+## 0.5.3 - Bug fix
+* Disabling the disable new file on open setting should work now.
+
+## 0.5.2 - Bug fix
+* Should no longer have issues with restoring unsaved files with disabling the
+new file on open.
+
+## 0.5.1 - Safer closing of the new file buffer
+* There are now checks to be sure that the file is empty and has no path before
+it is closed.
+
 ## 0.5.0 - Changed saving the project
 * The project is now saved when the window gets focus instead of with file edits.
 
