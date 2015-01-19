@@ -1,46 +1,49 @@
 _ = require 'underscore-plus'
 {$} = require 'atom'
 {Subscriber, Emitter} = require 'emissary'
+{CompositeDisposable} = require 'event-kit'
 MinimapFindResultsView = null
 
 PLUGIN_NAME = 'find-and-replace'
 
 module.exports =
 class MinimapFindAndReplaceBinding
-  Subscriber.includeInto(this)
   Emitter.includeInto(this)
 
   active: false
   pluginActive: false
   isActive: -> @pluginActive
 
-  constructor: (@findAndReplacePackage, @minimapPackage) ->
-    @minimap = require(@minimapPackage.path)
-    @findAndReplace = require(@findAndReplacePackage.path)
-
-    MinimapFindResultsView = require('./minimap-find-results-view')()
+  constructor: (@findAndReplace, @minimap) ->
+    @subscriptions = new CompositeDisposable
 
     @minimap.registerPlugin PLUGIN_NAME, this
 
   activatePlugin: ->
-    $(window).on 'find-and-replace:show find-and-replace:toggle find-and-replace:show-replace', @activate
-    atom.workspaceView.on 'core:cancel core:close', @deactivate
-    @subscribe @minimap, 'activated.minimap', @activate
-    @subscribe @minimap, 'deactivated.minimap', @deactivate
+    @subscriptions.add atom.commands.add 'atom-workspace',
+      'find-and-replace:show': @activate
+      'find-and-replace:toggle': @activate
+      'find-and-replace:show-replace': @activate
+      'core:cancel': @deactivate
+      'core:close': @deactivate
 
-    @activate() if @findViewIsVisible() and @minimapIsActive()
+    @subscriptions.add @minimap.onDidActivate @activate
+    @subscriptions.add @minimap.onDidDeactivate @deactivate
+
+    @activate() if @findViewIsVisible()
     @pluginActive = true
 
   deactivatePlugin: ->
-    $(window).off 'find-and-replace:show'
-    atom.workspaceView.off 'core:cancel core:close'
-    @unsubscribe()
+    @subscriptions.dispose()
     @deactivate()
     @pluginActive = false
 
   activate: =>
-    return @deactivate() unless @findViewIsVisible() and @minimapIsActive()
+    return @deactivate() unless @findViewIsVisible()
     return if @active
+
+    MinimapFindResultsView ||= require('./minimap-find-results-view')(@findAndReplace, @minimap)
+
     @active = true
 
     @findView = @findAndReplace.findView
@@ -48,11 +51,11 @@ class MinimapFindAndReplaceBinding
     @findResultsView = new MinimapFindResultsView(@findModel)
 
     setImmediate =>
-      @findModel.emit('updated', _.clone(@findModel.markers))
+      @findModel.emitter.emit('did-update', _.clone(@findModel.markers))
 
   deactivate: =>
     return unless @active
-    @findResultsView.destroy()
+    @findResultsView?.destroy()
     @active = false
 
   destroy: ->
@@ -66,5 +69,3 @@ class MinimapFindAndReplaceBinding
 
   findViewIsVisible: ->
     @findAndReplace.findView? and @findAndReplace.findView.parent().length is 1
-
-  minimapIsActive: -> @minimap.active

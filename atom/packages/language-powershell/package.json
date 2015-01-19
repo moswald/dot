@@ -1,6 +1,6 @@
 {
   "name": "language-powershell",
-  "version": "0.5.0",
+  "version": "0.6.6",
   "description": "PowerShell language support for Atom",
   "repository": {
     "type": "git",
@@ -11,16 +11,26 @@
     "atom": ">0.50.0"
   },
   "dependencies": {},
-  "readme": "# PowerShell language support for Atom\n\n[![Build Status](https://travis-ci.org/jugglingnutcase/language-powershell.svg?branch=master)](https://travis-ci.org/jugglingnutcase/language-powershell)\n[![Build status](https://ci.appveyor.com/api/projects/status/ru4cfpi46m4bn5od/branch/master)](https://ci.appveyor.com/project/jugglingnutcase/language-powershell/branch/master)\n\nThis package highlights PowerShell syntax in the [Atom editor](https://atom.io).\n\n## Language references\n\ni just found this [helpful blog post](http://blogs.msdn.com/b/powershell/archive/2006/05/10/594535.aspx) on the\nPowerShell grammar. i hope i *parse* :stuck_out_tongue_winking_eye: it well.\n\nThis was converted from [@davidpeckam]'s [PowerShell textmate bundle](https://github.com/davidpeckham/powershell.tmbundle). Thanks [@davidpeckam]!\n\n[@davidpeckam]:https://github.com/davidpeckham\n",
+  "readme": "# PowerShell language support for Atom\n\n[![Build Status](https://travis-ci.org/jugglingnutcase/language-powershell.svg?branch=master)](https://travis-ci.org/jugglingnutcase/language-powershell)\n[![Build status](https://ci.appveyor.com/api/projects/status/ru4cfpi46m4bn5od/branch/master)](https://ci.appveyor.com/project/jugglingnutcase/language-powershell/branch/master)\n\nThis package highlights PowerShell syntax in the [Atom editor](https://atom.io).\n\n## Language references\n\ni just found this [helpful blog post](http://blogs.msdn.com/b/powershell/archive/2006/05/10/594535.aspx) on the\nPowerShell grammar. i hope i *parse* :stuck_out_tongue_winking_eye: it well.\n\nThis was converted from [@davidpeckham]'s [PowerShell textmate bundle](https://github.com/davidpeckham/powershell.tmbundle). Thanks [@davidpeckham]!\n\n[@davidpeckham]:https://github.com/davidpeckham\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/jugglingnutcase/language-powershell/issues"
   },
   "homepage": "https://github.com/jugglingnutcase/language-powershell",
-  "_id": "language-powershell@0.5.0",
+  "_id": "language-powershell@0.6.6",
   "dist": {
-    "shasum": "b02623280e855b3f60e9645524f20eb3f8b250c0"
+    "shasum": "ceea64d772448f8a534c017636fd4d8398134ba8"
   },
-  "_resolved": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-8200-croam8\\package.tgz",
-  "_from": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-8200-croam8\\package.tgz"
+  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-7108-my8mh7\\package.tgz",
+  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-7108-my8mh7\\package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

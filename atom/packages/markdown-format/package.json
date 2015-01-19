@@ -1,7 +1,7 @@
 {
   "name": "markdown-format",
   "main": "./lib/markdown-format",
-  "version": "2.3.1",
+  "version": "2.5.0",
   "description": "Formats your Markdown text on save.",
   "repository": {
     "type": "git",
@@ -18,10 +18,26 @@
     "url": "https://github.com/shurcooL/atom-markdown-format/issues"
   },
   "homepage": "https://github.com/shurcooL/atom-markdown-format",
-  "_id": "markdown-format@2.3.1",
+  "_id": "markdown-format@2.5.0",
   "dist": {
-    "shasum": "e1f6fbbc84d52d1e6ad4aa7e03664dd303b4809d"
+    "shasum": "799daa7da4f5e5ed70535e86260a7862edfbb43a"
   },
-  "_resolved": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-114814-5840-1avrs6\\package.tgz",
-  "_from": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-114814-5840-1avrs6\\package.tgz"
+  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-15124-1rwssfb\\package.tgz",
+  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-15124-1rwssfb\\package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib\\markdown-format.coffee"
+      ],
+      ".js": [
+        "lib\\markdownfmt.js"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

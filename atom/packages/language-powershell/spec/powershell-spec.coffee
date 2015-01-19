@@ -8,7 +8,9 @@ describe "PowerShell grammar", ->
     this.addMatchers
       toHaveScopes: (scopes) ->
         notText = if @isNot then "not" else ""
-        this.message = =>"Expected token \"#{@actual.value}\" to #{notText} have scope \"#{scope.toString}\". Instead found: [#{@actual.scopes.toString()}]"
+        this.message = (expected) =>
+          "Expected token \"#{@actual.value}\" to #{notText} have scopes \"#{expected}\". Instead found: [#{@actual.scopes.toString()}]"
+
         allScopesPresent = scopes.every (scope) =>
           return scope in @actual.scopes
 
@@ -108,8 +110,12 @@ describe "PowerShell grammar", ->
         expect(tokens[3]).toHaveScopes ["embedded.variable.other.powershell"]
 
       it "should not tokenize as a variable when leading $ has been escaped", ->
-        expect(tokens[4].value).toEqual " `$bob"
-        expect(tokens[4]).not.toHaveScopes expectedDollarSignScopes
+        expect(tokens[5].value).toEqual "`$"
+        expect(tokens[5]).toHaveScopes ["source.powershell", "string.quoted.double.single-line.powershell", "constant.character.escape.powershell"]
+        expect(tokens[5]).not.toHaveScopes ["embedded.variable.other.powershell"]
+
+        expect(tokens[6].value).toEqual "bob"
+        expect(tokens[6]).not.toHaveScopes ["embedded.variable.other.powershell"]
 
   describe "Keywords", ->
     describe "Block keywords", ->
@@ -210,7 +216,7 @@ describe "PowerShell grammar", ->
 
     describe "Comparison operator keywords", ->
       comparisonOperators = [
-        "-eq", "-ceq", "-ieq", "-lt", "-gt", "-le", "-ge", "-ne", "-notlike",
+        "-eq", "-lt", "-gt", "-le", "-ge", "-ne", "-notlike",
         "-like", "-match", "-notmatch", "-contains", "-notcontains", "-in",
         "-notin", "-replace"
       ]
@@ -219,6 +225,29 @@ describe "PowerShell grammar", ->
         for operator in comparisonOperators
           {tokens} = grammar.tokenizeLine operator
           expect(tokens[0]).toEqual value: operator, scopes: ["source.powershell","keyword.operator.comparison.powershell"]
+
+      it "tokenizes comparison operators regardless of case", ->
+        for operator in comparisonOperators
+          {tokens} = grammar.tokenizeLine operator.toUpperCase()
+          expect(tokens[0]).toEqual value: operator.toUpperCase(), scopes: ["source.powershell","keyword.operator.comparison.powershell"]
+
+      it "tokenizes comparison operators when prepended with a case sensitivity marker", ->
+        for operator in comparisonOperators
+          insensitiveOperator = operator.replace('-', '-i')
+          {tokens} = grammar.tokenizeLine insensitiveOperator
+          expect(tokens[0]).toEqual value: insensitiveOperator, scopes: ["source.powershell","keyword.operator.comparison.powershell"]
+
+          sensitiveOperator = operator.replace('-', '-c')
+          {tokens} = grammar.tokenizeLine sensitiveOperator
+          expect(tokens[0]).toEqual value: sensitiveOperator, scopes: ["source.powershell","keyword.operator.comparison.powershell"]
+
+      it "will not tokenize the operators if there's more characters", ->
+        for operator in comparisonOperators
+          operatorPlus = operator + "ual"
+          {tokens} = grammar.tokenizeLine operatorPlus
+          expect(tokens.length).toBe(2)
+          expect(tokens[0]).not.toHaveScopes ["keyword.operator.comparison.powershell"]
+          expect(tokens[1]).not.toHaveScopes ["keyword.operator.comparison.powershell"]
 
   describe "Automatic variables", ->
     automaticVariables = [
@@ -305,3 +334,35 @@ describe "PowerShell grammar", ->
         expect(tokens[1]).toHaveScopes ["storage.type.powershell"]
         expect(tokens[2].value).toEqual "]"
         expect(tokens[2]).toHaveScopes ["punctuation.storage.type.end.powershell"]
+
+  describe "Escape characters", ->
+
+    it "escapes variables", ->
+      {tokens} = grammar.tokenizeLine("`$a")
+      expect(tokens[0]).toHaveScopes ["constant.character.escape.powershell"]
+
+    it "escapes any character", ->
+      {tokens} = grammar.tokenizeLine("`_")
+      expect(tokens[0]).toHaveScopes ["source.powershell", "constant.character.escape.powershell"]
+
+    it "escapes single quotes within a string", ->
+      {tokens} = grammar.tokenizeLine("$command = \'.\\myfile.ps1 -param1 `\'$myvar`\' -param2 whatever\'")
+      expect(tokens[7]).toHaveScopes ["source.powershell", "constant.character.escape.powershell", "string.quoted.single.single-line.powershell"]
+      expect(tokens[8]).toHaveScopes ["source.powershell", "string.quoted.single.single-line.powershell"]
+
+    it "escapes double quotes within a string", ->
+      {tokens} = grammar.tokenizeLine("$command = \".\\myfile.ps1 -param1 `\"$myvar`\" -param2 whatever\"")
+      expect(tokens[10]).toHaveScopes ["source.powershell", "constant.character.escape.powershell", "string.quoted.double.single-line.powershell"]
+      expect(tokens[11]).toHaveScopes ["source.powershell", "string.quoted.double.single-line.powershell"]
+
+  describe "Line continuations", ->
+
+    it "considers a backtick followed by a newline as a line continuation", ->
+      {tokens} = grammar.tokenizeLine("`\n")
+      expect(tokens[0].value).toEqual("`")
+      expect(tokens[0]).toHaveScopes ["punctuation.separator.continuation.line.powershell"]
+
+    it "considers a backtick followed by whitespace and a newline as a line continuation", ->
+      {tokens} = grammar.tokenizeLine("`  \n")
+      expect(tokens[0].value).toEqual("`")
+      expect(tokens[0]).toHaveScopes ["punctuation.separator.continuation.line.powershell"]

@@ -6,30 +6,22 @@ Q = require 'q'
 # file is loaded. The binding instance will evaluate the module when
 # created because at that point we're sure that both modules have been
 # loaded.
-module.exports = ->
-  colorHighlightPackage = atom.packages.getLoadedPackage('atom-color-highlight')
-  minimapPackage = atom.packages.getLoadedPackage('minimap')
-
-  minimap = require (minimapPackage.path)
-  colorHighlight = require (colorHighlightPackage.path)
-
+module.exports = (minimap, colorHighlight) ->
   class MinimapColorHighlighView
 
-    constructor: (@model, @editorView) ->
+    constructor: (@model, @editor) ->
       @decorationsByMarkerId = {}
 
-      {@editor} = @editorView
-      @model = colorHighlight.modelForEditorView(@editorView)
-
-      @subscription = @model.on 'updated', @markersUpdated
-      @markersUpdated(@model.markers) if @model?
+      @subscription = @model.onDidUpdateMarkers @requestMarkersUpdate
+      @requestMarkersUpdate() if @model?
+      @observeConfig()
 
     destroy: ->
       @subscription.off()
       @destroyDecorations()
       @minimapView?.find('.atom-color-highlight').remove()
 
-     observeConfig: ->
+    observeConfig: ->
       atom.config.observe 'atom-color-highlight.hideMarkersInComments', @rebuildDecorations
       atom.config.observe 'atom-color-highlight.hideMarkersInStrings', @rebuildDecorations
       atom.config.observe 'atom-color-highlight.markersAtEndOfLine', @rebuildDecorations
@@ -41,27 +33,42 @@ module.exports = ->
 
     getMinimap: ->
       defer = Q.defer()
-      if @editorView?.hasClass('editor')
-        minimapView = minimap.minimapForEditorView(@editorView)
-        if minimapView?
-          defer.resolve(minimapView)
-        else
-          poll = =>
-            minimapView = minimap.minimapForEditorView(@editorView)
-            if minimapView?
-              defer.resolve(minimapView)
-            else
-              setTimeout(poll, 10)
 
-          setTimeout(poll, 10)
+      if @minimapModel?
+        defer.resolve(@minimapModel)
+        return defer.promise
+
+      @minimapModel = minimap.minimapForEditor(@editor)
+
+      if @minimapModel?
+        defer.resolve(@minimapModel)
       else
-        defer.reject("#{@editorView} is not a legal editor")
+        poll = =>
+          @minimapModel = minimap.minimapForEditor(@editor)
+          if @minimapModel?
+            defer.resolve(@minimapModel)
+          else
+            setTimeout(poll, 10)
+
+        setTimeout(poll, 10)
 
       defer.promise
 
     updateSelections: ->
 
+    requestMarkersUpdate: =>
+      return if @frameRequested
+
+      @frameRequested = true
+      requestAnimationFrame =>
+        @updateMarkers()
+        @frameRequested = false
+
+    updateMarkers: =>
+      @markersUpdated(@model.markers)
+
     markersUpdated: (markers) =>
+      markers ||= []
       @getMinimap()
       .then (minimap) =>
         decorationsToRemove = _.clone(@decorationsByMarkerId)
@@ -79,7 +86,8 @@ module.exports = ->
         for id, decoration of decorationsToRemove
           decoration.destroy()
           delete @decorationsByMarkerId[id]
-
+      .fail (reason) ->
+        console.log reason.stack
 
     rebuildDecorations: =>
       @destroyDecorations()
@@ -87,12 +95,23 @@ module.exports = ->
 
     markerHidden: (marker) ->
       @markerHiddenDueToComment(marker) or @markerHiddenDueToString(marker)
+
+    getScope: (bufferRange) ->
+      if @editor.displayBuffer.scopesForBufferPosition?
+        @editor.displayBuffer.scopesForBufferPosition(bufferRange.start).join(';')
+      else
+        descriptor = @editor.displayBuffer.scopeDescriptorForBufferPosition(bufferRange.start)
+        if descriptor.join?
+          descriptor.join(';')
+        else
+          descriptor.scopes.join(';')
+
     markerHiddenDueToComment: (marker) ->
       bufferRange = marker.getBufferRange()
-      scope = @editor.displayBuffer.scopesForBufferPosition(bufferRange.start).join(';')
+      scope = @getScope(bufferRange)
       atom.config.get('atom-color-highlight.hideMarkersInComments') and scope.match(/comment/)?
 
     markerHiddenDueToString: (marker) ->
       bufferRange = marker.getBufferRange()
-      scope = @editor.displayBuffer.scopesForBufferPosition(bufferRange.start).join(';')
+      scope = @getScope(bufferRange)
       atom.config.get('atom-color-highlight.hideMarkersInStrings') and scope.match(/string/)?

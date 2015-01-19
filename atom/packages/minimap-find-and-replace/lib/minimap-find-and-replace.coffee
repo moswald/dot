@@ -1,17 +1,18 @@
-MinimapFindAndReplaceBinding = require './minimap-find-and-replace-binding'
+
+{requirePackages} = require 'atom-utils'
 
 module.exports =
   binding: null
+
   activate: (state) ->
-    findPackage = atom.packages.getLoadedPackage('find-and-replace')
-    minimapPackage = atom.packages.getLoadedPackage('minimap')
+    requirePackages('minimap', 'find-and-replace').then ([minimap, find]) ->
+      return @deactivate() unless minimap.versionMatch('>= 3.5.0')
 
-    return @deactivate() unless findPackage? and minimapPackage?
+      MinimapFindAndReplaceBinding = require './minimap-find-and-replace-binding'
+      @binding = new MinimapFindAndReplaceBinding find, minimap
 
-    minimap = require(minimapPackage.path)
-    return @deactivate() unless minimap.versionMatch('3.x')
-
-    @binding = new MinimapFindAndReplaceBinding findPackage, minimapPackage
+    .catch (reasons) ->
+      console.log reasons
 
   deactivate: ->
     @binding?.deactivate()

@@ -11,6 +11,9 @@
 'foldingStopMarker': '^\\s*\\}|^\\s*\\]|^\\s*\\)|^\\s*"""\\s*$'
 'patterns': [
   {
+    'include': '#escaped_char'
+  }
+  {
     'captures':
       '1':
         'name': 'punctuation.storage.type.begin.powershell'
@@ -18,10 +21,6 @@
         'name': 'punctuation.storage.type.end.powershell'
     'match':'(\\[)([A-Za-z0-9_\\.]+)(\\])'
     'name':'storage.type.powershell'
-  }
-  {
-    'match': '(`n)|(`")|(`\')|(`a)|(`b)|(`r)|(`t)|(`f)|(`0)|(`v)|(--%)|(``)'
-    'name': 'constant.character.escape.powershell'
   }
   {
     'captures':
@@ -43,7 +42,7 @@
     'name': 'keyword.operator.bitwise.powershell'
   }
   {
-    'match': '-eq|-ceq|-ieq|-lt|-gt|-le|-ge|-ne|-notlike|-like|-match|-notmatch|-contains|-notcontains|-in|-notin|-replace'
+    'match': '\\B(?i:-([i|c]?(eq|lt|gt|le|ge|ne|notlike|like|match|notmatch|contains|notcontains|in|notin|replace)))\\b'
     'name': 'keyword.operator.comparison.powershell'
   }
   {
@@ -483,6 +482,9 @@
   }
 ]
 'repository':
+  'escaped_char':
+    'match': '(`n)|(`")|(`\\$)|(`\')|(`a)|(`b)|(`r)|(`t)|(`f)|(`0)|(`v)|(--%)|(``)|(`\\S)'
+    'name': 'constant.character.escape.powershell'
   'constant_placeholder':
     'match': '(?i:%(\\([a-z_]+\\))?#?0?\\-?[ ]?\\+?([0-9]*|\\*)(\\.([0-9]*|\\*))?[hL]?[a-z%])'
     'name': 'constant.other.placeholder.powershell'
@@ -495,9 +497,6 @@
         'end': '(?![A-Za-z0-9_])'
         'patterns': [
           {
-            'include': '#illegal_names'
-          }
-          {
             'include': '#generic_names'
           }
         ]
@@ -507,9 +506,6 @@
         'end': '(?![A-Za-z0-9_])'
         'patterns': [
           {
-            'include': '#illegal_names'
-          }
-          {
             'include': '#generic_names'
           }
         ]
@@ -518,17 +514,11 @@
   'entity_name_class':
     'patterns': [
       {
-        'include': '#illegal_names'
-      }
-      {
         'include': '#generic_names'
       }
     ]
   'entity_name_function':
     'patterns': [
-      {
-        'include': '#illegal_names'
-      }
       {
         'include': '#generic_names'
       }
@@ -541,9 +531,6 @@
     ]
   'generic_names':
     'match': '[A-Za-z_][A-Za-z0-9_]*'
-  'illegal_names':
-    'match': '\\b(and|as|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|global|if|import|in|is|lambda|not|or|pass|print|raise|return|try|while|with|yield)\\b'
-    'name': 'invalid.illegal.name.powershell'
   'keyword_arguments':
     'begin': '\\b([a-zA-Z_][a-zA-Z_0-9]*)\\s*(=)(?!=)'
     'beginCaptures':
@@ -564,9 +551,7 @@
     'captures':
       '1':
         'name': 'punctuation.separator.continuation.line.powershell'
-      '2':
-        'name': 'invalid.illegal.unexpected-text.powershell'
-    'match': '(`)(.*)$\\n?'
+    'match': '(`)(\\s*)$\\n?'
   'regular_expressions':
     'comment': 'Changed disabled to 1 to turn off syntax highlighting in “r” strings.'
     'disabled': 0
@@ -607,9 +592,6 @@
           {
             'include': '#escaped_char'
           }
-          {
-            'include': 'source.sql'
-          }
         ]
       }
       {
@@ -633,9 +615,6 @@
           }
           {
             'include': '#escaped_char'
-          }
-          {
-            'include': 'source.sql'
           }
         ]
       }
@@ -720,7 +699,7 @@
             'include': '#constant_placeholder'
           }
           {
-            'include': 'source.sql'
+            'include': '#escaped_char'
           }
         ]
       }
@@ -742,7 +721,7 @@
             'include': '#constant_placeholder'
           }
           {
-            'include': 'source.sql'
+            'include': '#escaped_char'
           }
         ]
       }
@@ -763,6 +742,9 @@
           {
             'include': '#constant_placeholder'
           }
+          {
+            'include': '#escaped_char'
+          }
         ]
       }
       {
@@ -782,6 +764,9 @@
           {
             'include': '#constant_placeholder'
           }
+          {
+            'include': '#escaped_char'
+          }
         ]
       }
     ]
@@ -792,5 +777,8 @@
       }
       {
         'include': '#string_quoted_single'
+      }
+      {
+        'include': '#escaped_char'
       }
     ]

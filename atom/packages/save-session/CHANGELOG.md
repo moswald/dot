@@ -1,3 +1,71 @@
+## 0.11.3
+* Fixed an thrown error in Atom 0.166.0
+
+## 0.11.2
+* Fixed an `Undefined is not a function` issue with closing the first undefined
+buffer.
+
+## 0.11.1
+* Fixed an issue with opening files without a cursor position
+
+## 0.11.0 Added a delay option
+* An option was added for an additional delay for saving files after typing.
+
+## 0.10.0 Added lot's of tests
+* Some refactoring
+* Added tests for everything except files
+
+## 0.9.0 First steps to saving scroll position
+* It will save scrolls when files are normally saved
+* It's a little weird because of how Atom restores scrolling. Unfortunately, I
+don't have much control over it at the moment.
+
+## 0.8.10 Fix for users without an open project
+
+## 0.8.9 Another syntax fix...
+
+## 0.8.8 Another syntax fix
+
+## 0.8.7 Missed an @ symbol...
+* Should fix issue #20 now
+
+## 0.8.6 Fixed an issue with Windows and saving per project
+* Fixes issue #20
+
+## 0.8.5 No changes...
+
+## 0.8.4 Command for reloading project, Better handing of json errors
+* A command called `Reopen Project` will reopen the currently active project.
+This was mainly done for development/testing.
+* Json errors are handled better, instead of just crashing, it will just delete
+the project file and continue restoring.
+* Updated readme
+
+## 0.8.3 Added descriptions to settings
+
+## 0.8.2 Fixed an issue with opening new windows
+* Opening a new window (cmd+N) will no longer open the project you were just
+working on. It will open up the undefined project.
+
+## 0.8.1 Fixed a config issue
+
+## 0.8.0 Files open asynchronously, removed `Disable New File On Open Always`
+* Files are now opened asynchronously, which should help the initial load time
+* The `Disable New File On Open Always` setting has been removed, and is now the
+way `Disable New File On Open` works.
+
+## 0.7.4 Big refactor and save on exit fix
+* Moved code to separate files to clean up the main file.
+* Fixed an issue where having save on exit enabled and canceling the exit after
+being prompted to save would still exit Atom.
+
+## 0.7.3 Refactor and new preview gif
+* Refactored the code by moving config stuff to its own file
+* Updated the preview gif to show some newer features
+
+## 0.7.2 Fixed Windows Bug
+* Fixed an issue with Windows using `\` for file separators over `/`
+
 ## 0.7.1 - Updated readme
 
 ## 0.7.0 - Restoring files per project

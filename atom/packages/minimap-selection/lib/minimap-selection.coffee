@@ -6,33 +6,35 @@ module.exports =
   views: {}
 
   activate: (state) ->
-    minimapPackage = atom.packages.getLoadedPackage('minimap')
-    return @deactivate() unless minimapPackage?
+    try
+      atom.packages.activatePackage('minimap').then (minimapPackage) =>
+        @minimap = minimapPackage.mainModule
+        return @deactivate() unless @minimap.versionMatch('>= 3.5.0')
 
-    @minimap = require minimapPackage.path
-    return @deactivate() unless @minimap.versionMatch('3.x')
-
-    @minimap.registerPlugin 'selection', this
+        @minimap.registerPlugin 'selection', this
+    catch
+      @deactivate
 
   deactivate: ->
     @minimap.unregisterPlugin 'selection'
     @minimap = null
 
   isActive: -> @active
+
   activatePlugin: ->
     return if @active
     @active = true
 
-    @subscription = @minimap.eachMinimapView ({view}) =>
-      selectionView = new MinimapSelectionView(view)
-      selectionView.attach()
+    @subscription = @minimap.observeMinimaps (o) =>
+      minimap = o.view ? o
+      selectionView = new MinimapSelectionView(minimap)
 
-      @views[view.editor.id] = selectionView
+      @views[minimap.getTextEditor().id] = selectionView
 
   deactivatePlugin: ->
-    view.destroy() for id,view of @views
     return unless @active
+    view.destroy() for id,view of @views
     @active = false
     @views = {}
 
-    @subscription.off()
+    @subscription.dispose()

@@ -1,3 +1,38 @@
+<a name="v3.1.0"></a>
+# v3.1.0 (2015-01-05)
+
+## :sparkles: Features
+
+- Implement support for both minimap v3 and v4 API ([91085fb3](https://github.com/abe33/minimap-find-and-replace/commit/91085fb38b79680baff0e0e7e12762be32c26c21))
+
+<a name="v3.0.4"></a>
+# v3.0.4 (2014-12-05)
+
+## :bug: Bug Fixes
+
+- Fix broken plugin since API changes ([a4020640](https://github.com/abe33/minimap-find-and-replace/commit/a4020640bca345a41583c0815e9d7d91c24df0c4))
+
+<a name="v3.0.3"></a>
+# v3.0.3 (2014-10-23)
+
+## :bug: Bug Fixes
+
+- Fix accessing packages by using a promise ([7f6b11b8](https://github.com/abe33/minimap-find-and-replace/commit/7f6b11b8416374d5786d4f95d5fec80f5a437f27))
+
+<a name="v3.0.2"></a>
+# v3.0.2 (2014-10-22)
+
+## :bug: Bug Fixes
+
+- Delay the package activation to when all packages are active ([bd49e304](https://github.com/abe33/minimap-find-and-replace/commit/bd49e30422867badb323a3916c4ab9681014d3f7))
+
+<a name="v3.0.1"></a>
+# v3.0.1 (2014-10-22)
+
+## :bug: Bug Fixes
+
+- Fix broken access to package dependencies ([4e2797fa](https://github.com/abe33/minimap-find-and-replace/commit/4e2797fab7df3c778346f6f90b3c8e8981b18fff))
+
 <a name="v3.0.0"></a>
 # v3.0.0 (2014-09-19)
 

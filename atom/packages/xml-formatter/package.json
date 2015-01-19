@@ -1,7 +1,7 @@
 {
   "name": "xml-formatter",
   "main": "./lib/xml-formatter",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "XML Formatter",
   "activationEvents": [
     "xml-formatter:indent"
@@ -21,10 +21,23 @@
     "url": "https://github.com/neyestrabelli/xml-formatter/issues"
   },
   "homepage": "https://github.com/neyestrabelli/xml-formatter",
-  "_id": "xml-formatter@0.7.1",
+  "_id": "xml-formatter@0.7.2",
   "dist": {
-    "shasum": "1079ba1d6e0bd4f96051b3f35c35da41b00655d9"
+    "shasum": "787c2cb5242494193c4e0cd53bdf7915b6eda254"
   },
-  "_resolved": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-7728-xf0sat\\package.tgz",
-  "_from": "C:\\Users\\Matt\\AppData\\Local\\Temp\\d-11488-7728-xf0sat\\package.tgz"
+  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-9648-154m3tn\\package.tgz",
+  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-9648-154m3tn\\package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib\\xml-formatter.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

@@ -25,8 +25,18 @@
   "homepage": "https://github.com/rzhw/language-sln",
   "_id": "language-sln@0.1.0",
   "dist": {
-    "shasum": "ba27a212f468098e986dfd2318ce67580f0d36cc"
+    "shasum": "059c547089a4ee689158eba7e6878f9f90788894"
   },
-  "_resolved": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-7352-10424vw\\package.tgz",
-  "_from": "C:\\Users\\502345~1\\AppData\\Local\\Temp\\d-114822-7352-10424vw\\package.tgz"
+  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-7648-1uj89mw\\package.tgz",
+  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-7648-1uj89mw\\package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

@@ -1,36 +1,35 @@
-{View} = require 'atom'
+{CompositeDisposable} = require 'event-kit'
+
 module.exports =
-class MinimapSelectionView extends View
+class MinimapSelectionView
   decorations: []
-  @content: ->
-    @div class: 'minimap-selection'
 
-  initialize: (@minimapView) ->
-    @subscribe @minimapView.editorView, "selection:changed", @handleSelection
-    @subscribe @minimapView.editorView, "cursor-added", @handleSelection
-    @subscribe @minimapView.editorView, "cursor-moved", @handleSelection
-    @subscribe @minimapView.editorView, "cursor-removed", @handleSelection
+  constructor: (@minimap) ->
+    editor = @minimap.getTextEditor()
 
-  attach: ->
-    @minimapView.miniUnderlayer.append(this)
+    @subscriptions = new CompositeDisposable
+
+    @subscriptions.add editor.onDidChangeSelectionRange @handleSelection
+    @subscriptions.add editor.onDidAddCursor @handleSelection
+    @subscriptions.add editor.onDidChangeCursorPosition @handleSelection
+    @subscriptions.add editor.onDidRemoveCursor @handleSelection
+
     @handleSelection()
 
   destroy: ->
-    @detach()
-    @unsubscribe()
-    @minimapView = null
+    @removeDecorations()
+    @subscriptions.dispose()
+    @minimap = null
 
   handleSelection: =>
     @removeDecorations()
 
-    {editor} = @minimapView
-
-    return if editor.getSelections().length is 1 and editor.getLastSelection().isEmpty()
-
-    for selection in editor.getSelections()
-      @decorations.push @minimapView.decorateMarker(selection.marker, type: 'highlight-under', scope: '.minimap .editor .selection .region')
+    for selection in @minimap.getTextEditor().getSelections()
+      unless selection.isEmpty()
+        decoration = @minimap.decorateMarker(selection.marker, type: 'highlight-under', scope: '.minimap .minimap-selection .region')
+        @decorations.push decoration if decoration?
 
   removeDecorations: ->
     return if @decorations.length is 0
-    decoration.destroy() for decoration in @decorations
+    decoration?.destroy() for decoration in @decorations
     @decorations = []

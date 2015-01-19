@@ -1,3 +1,47 @@
+<a name="v3.1.0"></a>
+# v3.1.0 (2015-01-05)
+
+## :sparkles: Features
+
+- Implement debounced decoration update ([7ac98258](https://github.com/abe33/minimap-color-highlight/commit/7ac982585c639ee055cce2c152f215d8868430b6))
+- Implement temporary support for both minimap v3 and v4 ([b4097808](https://github.com/abe33/minimap-color-highlight/commit/b4097808a38f7fc963ba564bf9c3136a34e655b6))
+
+<a name="v3.0.5"></a>
+# v3.0.5 (2015-01-05)
+
+## :bug: Bug Fixes
+
+- Fix broken refresh when markers array is null ([1fab6c41](https://github.com/abe33/minimap-color-highlight/commit/1fab6c41d204062a30dadacde0dbe309cc48a9b0))
+
+<a name="v3.0.4"></a>
+# v3.0.4 (2015-01-03)
+
+## :bug: Bug Fixes
+
+- Fix binding for atom-color-highlight v3 ([6a6a309c](https://github.com/abe33/minimap-color-highlight/commit/6a6a309cac72b99474bc9ab27b471f86af03e4ad))
+
+<a name="v3.0.3"></a>
+# v3.0.3 (2014-10-22)
+
+## :bug: Bug Fixes
+
+- Add description in package.json
+
+<a name="v3.0.2"></a>
+# v3.0.2 (2014-10-22)
+
+## :bug: Bug Fixes
+
+- Fix broken access to scope in latest Atom ([f0dbddfe](https://github.com/abe33/minimap-color-highlight/commit/f0dbddfe86502041a4263b2374fa7611406b8f6e))
+
+<a name="v3.0.1"></a>
+# v3.0.1 (2014-10-14)
+
+## :bug: Bug Fixes
+
+- Fix access to removed private method ([5c970609](https://github.com/abe33/minimap-color-highlight/commit/5c970609036d41713bf03d084a10494e206828f7))
+- Prevent an exception when trying to destroy an already destroyed view ([ed35276e](https://github.com/abe33/minimap-color-highlight/commit/ed35276e9ed86dd7afcd4d593d1940ee2bc3df6f))
+
 <a name="v3.0.0"></a>
 # v3.0.0 (2014-09-19)
 
