@@ -8,14 +8,36 @@
  * http://www.lesscss.org
  */
 
+@import "colors";
+
 .tree-view {
 
 }
 
-.editor {
+// style the background and foreground colors on the atom-text-editor-element
+// itself
+atom-text-editor {
 
 }
 
-.editor .cursor {
+// To style other content in the text editor's shadow DOM, use the ::shadow
+// expression
+atom-text-editor::shadow {
+    .cursor {
 
+    }
+
+    .meta.structure.dictionary.json {
+        color: @syntax-text-color;
+
+        // make all strings pastel white
+        & > .string.quoted.json {
+            color: @light-orange;
+        }
+
+        // make an exception for all .string keys whose immediate parent is .value
+        & > .value.json > .string.json {
+            color: @green;
+        }
+    }
 }
