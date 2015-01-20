@@ -24,20 +24,5 @@ atom-text-editor {
 // expression
 atom-text-editor::shadow {
     .cursor {
-
-    }
-
-    .meta.structure.dictionary.json {
-        color: @syntax-text-color;
-
-        // make all strings pastel white
-        & > .string.quoted.json {
-            color: @light-orange;
-        }
-
-        // make an exception for all .string keys whose immediate parent is .value
-        & > .value.json > .string.json {
-            color: @green;
-        }
     }
 }
