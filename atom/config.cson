@@ -21,7 +21,14 @@
   minimap:
     plugins:
       selection: true
+      "color-highlight": true
       "highlight-selected": true
+      "find-and-replace": true
   "save-session":
     project: "c:\\Users\\Matt.Oswald\\projects\\personal\\WekeRoadInkRedux-syntax"
+    windowX: 470
+    windowY: 2
+    windowWidth: 2088
+    windowHeight: 1440
     dataSaveFolder: "c:\\Users\\Matt.Oswald\\.atom\\packages\\save-session\\projects"
+  "atom-color-highlight": {}
