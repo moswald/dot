@@ -23,11 +23,9 @@
   },
   "homepage": "https://github.com/abe33/minimap-highlight-selected",
   "_id": "minimap-highlight-selected@3.1.0",
-  "dist": {
-    "shasum": "319704d717d1bf607e5bd9d2910d4ff8dc3192a9"
-  },
-  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-12560-yo93vq\\package.tgz",
-  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-12560-yo93vq\\package.tgz",
+  "_shasum": "d85c8813fd8b079e7b7640d0f7161ecbd241bd07",
+  "_resolved": "file:..\\d-115024-4560-vrgvgk\\package.tgz",
+  "_from": "..\\d-115024-4560-vrgvgk\\package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

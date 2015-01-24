@@ -28,11 +28,9 @@
   },
   "homepage": "https://github.com/abe33/minimap-color-highlight",
   "_id": "minimap-color-highlight@3.1.0",
-  "dist": {
-    "shasum": "c394adc74960dd2509f0ff947a40729a9c1105b0"
-  },
-  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-3980-mt1ip3\\package.tgz",
-  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-3980-mt1ip3\\package.tgz",
+  "_shasum": "fe974a50a1fca7843f324fcbd8916964de65f631",
+  "_resolved": "file:..\\d-115024-4428-voerg3\\package.tgz",
+  "_from": "..\\d-115024-4428-voerg3\\package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

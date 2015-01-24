@@ -23,11 +23,9 @@
   },
   "homepage": "https://github.com/abe33/atom-minimap-selection",
   "_id": "minimap-selection@3.1.1",
-  "dist": {
-    "shasum": "5ea4657f4e9140d7e12c8d27acc8f8bbe095ff8b"
-  },
-  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-17828-t6o1eb\\package.tgz",
-  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-17828-t6o1eb\\package.tgz",
+  "_shasum": "af557586a8de7ba9935ef8b717425cabc90e86e0",
+  "_resolved": "file:..\\d-115024-1216-1iz90w3\\package.tgz",
+  "_from": "..\\d-115024-1216-1iz90w3\\package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

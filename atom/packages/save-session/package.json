@@ -24,11 +24,9 @@
   },
   "homepage": "https://github.com/mpeterson2/save-session",
   "_id": "save-session@0.11.3",
-  "dist": {
-    "shasum": "419f28d3e38eafd2f5419b373e11d96f0db6e75e"
-  },
-  "_resolved": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-13444-oknk89\\package.tgz",
-  "_from": "C:\\Users\\MATT~1.OSW\\AppData\\Local\\Temp\\d-115019-13444-oknk89\\package.tgz",
+  "_shasum": "e96da70b8dac640bc9cff8146e6cc3b6beed5625",
+  "_resolved": "file:..\\d-115024-2888-1bbfopu\\package.tgz",
+  "_from": "..\\d-115024-2888-1bbfopu\\package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
